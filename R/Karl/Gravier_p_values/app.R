@@ -1,6 +1,7 @@
 library(shiny)
 library(shinythemes)
 library(tidyverse)
+library(ggdark)
 
 
 load("gravier_nested_long_with_models")
@@ -21,7 +22,9 @@ manhatten_plot <- function(dataset,p){
   geom_hline(yintercept = -log10(p),linetype="dashed") + 
   theme_classic() + 
   theme(legend.position = "bottom",axis.text.x = element_text(angle=45,size=3)) +
-  labs(x="Gene",y="Minus log10(p)")
+  labs(x="Gene",y="Minus log10(p)")+
+    dark_theme_gray() 
+  
 }
 
 filter_sig_genes <- function(dataset){
@@ -35,6 +38,7 @@ filter_sig_genes <- function(dataset){
 
 
 ui <- fluidPage(
+  theme = shinytheme("cyborg"),
   fluidRow(
     column(8,
   sliderInput("p","p-value",1e-3,0.1,value=0.05,step=0.01)
