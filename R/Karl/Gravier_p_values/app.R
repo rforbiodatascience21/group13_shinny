@@ -40,9 +40,21 @@ filter_sig_genes <- function(dataset){
     select("gene","p.value") %>% 
     mutate(p.value = as.character(p.value))
   return(data)
+  
+  
 }
 
-
+count_sig_genes <- function(dataset){
+  data <-
+    dataset %>% 
+    filter(identified_as=="significant") %>% 
+    select("gene","p.value") %>% 
+    mutate(p.value = as.character(p.value))%>% 
+    count()
+  return(data)
+  
+  
+}
 ui <- fluidPage(
   theme = shinytheme("cyborg"),
   fluidRow(
@@ -55,8 +67,12 @@ ui <- fluidPage(
   ),
   fluidRow(
   plotOutput("plot"),
+  h3("Number of genes:"),
+  tableOutput("gene_count"),
   h3("Genes Identified as Significant:"),
-  tableOutput("sig_genes")
+  tableOutput("sig_genes"),
+  
+  
   )
 )
 
@@ -77,6 +93,8 @@ server <- function(input,output,session){
   output$plot <- renderPlot(manhatten_plot(data(),input$p))
   
   output$sig_genes <- renderTable(filter_sig_genes(data()))
+  
+  output$gene_count <- renderTable(count_sig_genes(data()))
 }
 
 shinyApp(ui, server)
