@@ -16,16 +16,22 @@ significant_identification <- function(dataset,p){
 
 manhatten_plot <- function(dataset,p){
   dataset %>% 
-  mutate(gene=fct_reorder(as.factor(gene),neg_log_p,.desc = TRUE)) %>% 
-  ggplot(aes(gene,neg_log_p,colour=identified_as)) + 
-  geom_point() + 
-  geom_hline(yintercept = -log10(p),linetype="dashed") + 
-  theme_classic() + 
-  theme(legend.position = "bottom",axis.text.x = element_text(angle=45,size=3)) +
-  labs(x="Gene",y="Minus log10(p)")+
-    dark_theme_gray() 
-  
-}
+  mutate(gene = fct_reorder(as.factor(gene),
+                            neg_log_p,
+                            .desc = TRUE)) %>% 
+  ggplot(aes(gene,
+             neg_log_p,
+             colour = identified_as)) + 
+  geom_point(size = 2) + 
+  geom_hline(yintercept = -log10(p),
+             linetype = "dashed") + 
+  labs(x="Gene",
+       y="Minus log10(p)") +
+  dark_theme_gray() +
+  theme(legend.position = "bottom",
+        axis.text.x = element_text(angle=45,
+                                   size=3))
+  }
 
 filter_sig_genes <- function(dataset){
   data <-
